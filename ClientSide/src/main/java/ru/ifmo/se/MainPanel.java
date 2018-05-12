@@ -6,6 +6,7 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.plaf.basic.BasicArrowButton;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import java.awt.*;
@@ -14,12 +15,11 @@ import java.awt.geom.Ellipse2D;
 import java.io.IOException;
 import java.nio.ByteOrder;
 import java.text.NumberFormat;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class MainPanel extends JFrame {
+    ResourceBundle bundle;
     JMenu menu;
     JMenuBar jMenuBar;
     JMenuItem jMenuItem;
@@ -34,6 +34,10 @@ public class MainPanel extends JFrame {
     JButton remButton;
     JButton startButton;
     JButton stopButton;
+    JButton ruButton;
+    JButton engButton;
+    JButton uaButton;
+    JButton fiButton;
     JCheckBox checkBoxN;
     JCheckBox checkBoxA;
     JCheckBox checkBoxI;
@@ -55,9 +59,10 @@ public class MainPanel extends JFrame {
 
     public MainPanel() {
         app = new ClientApp();
+        bundle = ResourceBundle.getBundle("ru.ifmo.se.resources.GuiLabels", Locale.getDefault());
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setTitle("Lab 7. ClientSide");
+        setTitle(bundle.getString("title"));
         setResizable(false);
         createMenu();
         container = getContentPane();
@@ -97,8 +102,14 @@ public class MainPanel extends JFrame {
                             .addComponent(ageLabel).addGap(10)
                             .addComponent(slider).addGap(10)
                             .addComponent(distLabel).addGap(10)
-                            .addComponent(formattedTextField,20,20,20)).addGap(10)
-                            .addComponent(graphPanel, 300,400,500));
+                            .addComponent(formattedTextField,20,20,20).addGap(30)
+                            .addGroup(groupLayout.createParallelGroup(GroupLayout.Alignment.TRAILING)
+                                .addComponent(engButton).addGap(5)
+                                .addComponent(ruButton).addGap(5)
+                                .addComponent(fiButton).addGap(5)
+                                .addComponent(uaButton))).addGap(10)
+                        .addComponent(graphPanel, 300,400,500)
+                        );
         groupLayout.setHorizontalGroup(
                 groupLayout.createSequentialGroup()
                         .addComponent(jTree).addGap(100)
@@ -119,7 +130,12 @@ public class MainPanel extends JFrame {
                                 .addComponent(ageLabel).addGap(10)
                                 .addComponent(slider).addGap(10)
                                 .addComponent(distLabel).addGap(10)
-                                .addComponent(formattedTextField, 100,150,200)).addGap(10)
+                                .addComponent(formattedTextField, 100,150,200).addGap(50)
+                                .addGroup(groupLayout.createSequentialGroup()
+                                    .addComponent(engButton).addGap(10)
+                                    .addComponent(ruButton).addGap(10)
+                                    .addComponent(fiButton).addGap(10)
+                                    .addComponent(uaButton))).addGap(10)
                             .addComponent(graphPanel, 300, 400, 500));
         model.reload();
         groupLayout.linkSize(textField);
@@ -137,8 +153,8 @@ public class MainPanel extends JFrame {
 
     public void createMenu(){
         jMenuBar = new JMenuBar();
-        menu = new JMenu("Menu");
-        jMenuItem = new JMenuItem("Load collection from server");
+        menu = new JMenu(bundle.getString("menu"));
+        jMenuItem = new JMenuItem(bundle.getString("load"));
         jMenuItem.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent a) {
                 ClientApp.toServer.println("data_request");
@@ -148,7 +164,7 @@ public class MainPanel extends JFrame {
             }
         });
         menu.add(jMenuItem);
-        jMenuItem = new JMenuItem("Save current collection on server");
+        jMenuItem = new JMenuItem(bundle.getString("save"));
         jMenuItem.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent a) {
                 ClientApp.toServer.println("save");
@@ -157,7 +173,7 @@ public class MainPanel extends JFrame {
             }
         });
         menu.add(jMenuItem);
-        jMenuItem = new JMenuItem("Clear current collection");
+        jMenuItem = new JMenuItem(bundle.getString("clear"));
         jMenuItem.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent a) {
                 app.clear();
@@ -170,10 +186,10 @@ public class MainPanel extends JFrame {
     }
 
     public void createOptions(){
-        label = new JLabel("Object to add/Remove objects greater than:");
+        label = new JLabel(bundle.getString("label"));
         resLabel = new JLabel();
         textField = new JTextField("{\"name\":\"Andy\"}",15);
-        addButton = new JButton("Add object");
+        addButton = new JButton(bundle.getString("addButton"));
         addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -182,7 +198,7 @@ public class MainPanel extends JFrame {
                 updateTree();
             }
         });
-        remButton = new JButton("Remove greater objects");
+        remButton = new JButton(bundle.getString("remButton"));
         remButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -191,7 +207,7 @@ public class MainPanel extends JFrame {
                 updateTree();
             }
         });
-        startButton = new JButton("Start");
+        startButton = new JButton(bundle.getString("startButton"));
         startButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -229,14 +245,14 @@ public class MainPanel extends JFrame {
                 persons.clear();
             }
         });
-        stopButton = new JButton("Stop");
+        stopButton = new JButton(bundle.getString("stopButton"));
         stopButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 thread.interrupt();
             }
         });
-        checkBoxN = new JCheckBox("Neutral");
+        checkBoxN = new JCheckBox(bundle.getString("checkBoxN"));
         checkBoxN.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
@@ -246,7 +262,7 @@ public class MainPanel extends JFrame {
                     states.remove(State.NEUTRAL);
             }
         });
-        checkBoxA = new JCheckBox("Angry");
+        checkBoxA = new JCheckBox(bundle.getString("checkBoxA"));
         checkBoxA.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
@@ -256,7 +272,7 @@ public class MainPanel extends JFrame {
                     states.remove(State.ANGRY);
             }
         });
-        checkBoxI = new JCheckBox("Interested");
+        checkBoxI = new JCheckBox(bundle.getString("checkBoxI"));
         checkBoxI.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
@@ -266,7 +282,7 @@ public class MainPanel extends JFrame {
                     states.remove(State.INTERESTED);
             }
         });
-        checkBoxB = new JCheckBox("Bored");
+        checkBoxB = new JCheckBox(bundle.getString("checkBoxB"));
         checkBoxB.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
@@ -276,7 +292,7 @@ public class MainPanel extends JFrame {
                     states.remove(State.BORED);
             }
         });
-        ageLabel = new JLabel("Minimum age:");
+        ageLabel = new JLabel(bundle.getString("ageLabel"));
         slider = new JSlider(0,120,25);
         slider.setPaintLabels(true);
         slider.setMajorTickSpacing(25);
@@ -286,7 +302,7 @@ public class MainPanel extends JFrame {
                 age = slider.getValue();
             }
         });
-        distLabel = new JLabel("Maximum distance(int):");
+        distLabel = new JLabel(bundle.getString("distLabel"));
         formattedTextField = new JFormattedTextField(NumberFormat.getIntegerInstance());
         graphPanel = new GraphPanel(app);
         graphPanel.addMouseListener(new MouseListener() {
@@ -323,6 +339,34 @@ public class MainPanel extends JFrame {
             @Override
             public void mouseExited(MouseEvent e) {
 
+            }
+        });
+        ruButton = new JButton("ru");
+        ruButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                changeLocale(ResourceBundle.getBundle("ru.ifmo.se.resources.GuiLabels", new Locale("ru_RU")));
+            }
+        });
+        engButton = new JButton("eng");
+        engButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                changeLocale(ResourceBundle.getBundle("ru.ifmo.se.resources.GuiLabels", new Locale("en")));
+            }
+        });
+        fiButton = new JButton("fi");
+        fiButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                changeLocale(ResourceBundle.getBundle("ru.ifmo.se.resources.GuiLabels", new Locale("fi")));
+            }
+        });
+        uaButton = new JButton("ua");
+        uaButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                changeLocale(ResourceBundle.getBundle("ru.ifmo.se.resources.GuiLabels", new Locale("uk")));
             }
         });
     }
@@ -400,5 +444,26 @@ public class MainPanel extends JFrame {
                 break;
         }
         return max;
+    }
+
+    private void changeLocale(ResourceBundle bundle){
+        this.bundle = bundle;
+        changeTexts();
+    }
+
+    private void changeTexts(){
+        this.setTitle(bundle.getString("title"));
+        label.setText(bundle.getString("label"));
+        ageLabel.setText(bundle.getString("ageLabel"));
+        distLabel.setText(bundle.getString("distLabel"));
+        addButton.setText(bundle.getString("addButton"));
+        remButton.setText(bundle.getString("remButton"));
+        startButton.setText(bundle.getString("startButton"));
+        stopButton.setText(bundle.getString("stopButton"));
+        checkBoxN.setText(bundle.getString("checkBoxN"));
+        checkBoxA.setText(bundle.getString("checkBoxA"));
+        checkBoxI.setText(bundle.getString("checkBoxI"));
+        checkBoxB.setText(bundle.getString("checkBoxB"));
+        createMenu();
     }
 }

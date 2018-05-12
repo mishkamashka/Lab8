@@ -46,7 +46,7 @@ class Connection extends Thread {
     private static File file;
     private static ReentrantLock locker = new ReentrantLock();
     private boolean isAuthorized;
-    private String password = "password";
+    private String password = "a";
 
     Connection(Socket client){
         Connection.filemaker();

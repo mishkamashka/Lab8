@@ -6,6 +6,7 @@ import ru.ifmo.se.exceptions.TooMuchMoneyException;
 
 import java.awt.*;
 import java.io.Serializable;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,8 +23,10 @@ public abstract class Person implements Serializable, Comparable {
     private List<Accessories> accessories = new ArrayList<>();
     private State state;
     private Color color;
+    private ZonedDateTime time;
 
     public Person(String name) {
+        time = ZonedDateTime.now();
         this.name = name;
         this.setState();
         getSteps_from_door();
@@ -31,6 +34,7 @@ public abstract class Person implements Serializable, Comparable {
     }
 
     public Person() {
+        time = ZonedDateTime.now();
         name = "Stranger";
         this.setState();
         getSteps_from_door();
@@ -38,6 +42,7 @@ public abstract class Person implements Serializable, Comparable {
     }
 
     public Person(String name, String last_name) {
+        time = ZonedDateTime.now();
         this.name = name;
         this.last_name = last_name;
         this.setState();
@@ -94,12 +99,20 @@ public abstract class Person implements Serializable, Comparable {
         return this.age;
     }
 
+    public void setTime(ZonedDateTime time) {
+        this.time = time;
+    }
+
     public void setLast_name(String last_name) {
         this.last_name = last_name;
     }
 
     public String getLast_name() {
         return last_name;
+    }
+
+    public ZonedDateTime getTime() {
+        return time;
     }
 
     public void showClothes(List<? extends Clothes> clothes) {

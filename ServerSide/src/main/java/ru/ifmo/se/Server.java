@@ -6,6 +6,7 @@ import org.json.JSONObject;
 
 import java.io.*;
 import java.net.*;
+import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -167,6 +168,7 @@ class Connection extends Thread {
                     person.getSteps_from_door(); //so they are not 0 (just needed to be so)
                     person.setState(); // erh.. the same stuff
                     person.set_X_Y();
+                    person.setTime(ZonedDateTime.now());
                     Server.collec.add(person);
                 }
                 System.out.println("Collection has been loaded.");

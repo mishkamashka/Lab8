@@ -6,6 +6,8 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
 import javax.swing.plaf.basic.BasicArrowButton;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
@@ -71,6 +73,23 @@ public class MainPanel extends JFrame {
         container.add(jPanel);
         root = new DefaultMutableTreeNode("People");
         jTree = new JTree(root);
+        jTree.addTreeSelectionListener(new TreeSelectionListener() {
+            @Override
+            public void valueChanged(TreeSelectionEvent e) {
+                String[] node = jTree.getLastSelectedPathComponent().toString().split(" ");
+                Person selectedPerson;
+                if (node.length > 1)
+                    selectedPerson = new Known(node[0], node[1]);
+                else
+                    selectedPerson = new Known(node[0]);
+                for (Person person: app.collec) {
+                    if (person.equals(selectedPerson)) {
+                        resLabel.setText(person.toString() + " " + person.getTime().toString());
+                        break;
+                    }
+                }
+            }
+        });
         app.connect();
         while (!isAuthorized) {
         }

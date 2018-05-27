@@ -1,12 +1,16 @@
 package ru.ifmo.se;
 
+import ru.ifmo.se.annotations.JORM;
+import ru.ifmo.se.annotations.JORMIgnoredColumn;
 import ru.ifmo.se.enums.Material;
 import ru.ifmo.se.enums.Patch;
 
 import java.io.Serializable;
 
+@JORM
 public abstract class Clothes implements Serializable {
     private String colour;
+    @JORMIgnoredColumn
     private Patch[] patches = {Patch.NONE, Patch.NONE, Patch.NONE, Patch.NONE, Patch.NONE};
     private Material material = Material.NONE;
 

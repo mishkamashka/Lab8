@@ -1,9 +1,11 @@
 package ru.ifmo.se;
 
+import ru.ifmo.se.annotations.JORM;
 import ru.ifmo.se.enums.Material;
 import ru.ifmo.se.enums.Patch;
 import ru.ifmo.se.enums.Season;
 
+@JORM
 public class Jacket extends GeneralClothes {
     boolean buttonedUp;
     Season season = Season.DEMISEASON;

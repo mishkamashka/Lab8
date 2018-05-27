@@ -11,6 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Person implements Serializable, Comparable {
+    final static Long serialVersionUID = 556776544L;
+
+    private int id;
     private String name;
     private String last_name;
     private int age;

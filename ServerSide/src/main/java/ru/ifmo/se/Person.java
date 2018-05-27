@@ -1,5 +1,7 @@
 package ru.ifmo.se;
 
+import ru.ifmo.se.annotations.JORM;
+import ru.ifmo.se.annotations.JORMIgnoredColumn;
 import ru.ifmo.se.enums.State;
 import ru.ifmo.se.exceptions.NotEnoughMoneyException;
 import ru.ifmo.se.exceptions.TooMuchMoneyException;
@@ -10,6 +12,7 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@JORM
 public abstract class Person implements Serializable, Comparable {
     private String name;
     private String last_name;
@@ -17,9 +20,11 @@ public abstract class Person implements Serializable, Comparable {
     private int steps_from_door = (int) (Math.random()*100);
     private int x;
     private int y;
-
+    @JORMIgnoredColumn
     private List<GeneralClothes> generalClothes = new ArrayList<>();
+    @JORMIgnoredColumn
     private List<Shoes> shoes = new ArrayList<>();
+    @JORMIgnoredColumn
     private List<Accessories> accessories = new ArrayList<>();
     private State state;
     private Color color;

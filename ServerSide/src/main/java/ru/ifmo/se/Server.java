@@ -3,9 +3,11 @@ package ru.ifmo.se;
 import com.google.gson.JsonSyntaxException;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import ru.ifmo.se.exceptions.NotAvailableForJORMClass;
 
 import java.io.*;
 import java.net.*;
+import java.sql.SQLException;
 import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.concurrent.locks.ReentrantLock;
@@ -25,6 +27,17 @@ public class Server extends Thread {
             e.printStackTrace();
         }
         System.out.println("Server is now running.");
+        try {
+            PSQLConnection psqlConnection = new PSQLConnection("localhost", 9999, "studs", "s243877", "joc574");
+            DDL ddl = new DDL(psqlConnection.getConnection());
+            DML dml = new DML(psqlConnection.getConnection());
+            Clothes clothes = new Jacket("red");
+            ddl.createTable(clothes.getClass());
+            dml.insert(clothes);
+            psqlConnection.getConnection().close();
+        } catch(SQLException | NotAvailableForJORMClass e) {
+            e.printStackTrace();
+        }
         try {
             while (true) {
                 Socket client = serverSocket.accept();

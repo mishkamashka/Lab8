@@ -98,7 +98,6 @@ public class MainPanel extends JFrame {
         app.load();
         updateTree();
 
-
         model = (DefaultTreeModel) jTree.getModel();
         createOptions();
         groupLayout.setVerticalGroup(

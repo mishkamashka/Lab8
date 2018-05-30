@@ -28,7 +28,7 @@ public class Server extends Thread {
         }
         System.out.println("Server is now running.");
         try {
-            PSQLConnection psqlConnection = new PSQLConnection("localhost", 9999, "studs", "s243877", "joc574");
+            PSQLConnection psqlConnection = new PSQLConnection("pg", 5432, "studs", "s243877", "joc574");
             DDL ddl = new DDL(psqlConnection.getConnection());
             DML dml = new DML(psqlConnection.getConnection());
             Clothes clothes = new Jacket("red");
@@ -142,8 +142,10 @@ class Connection extends Thread {
                                     "\nremove_greater {element} - remove elements greater than given;\n" +
                                     "show - show the collection;\nquit - quit;\n");
                     }
-                }catch (NullPointerException e){
-                    System.out.println("Null command received.");
+                } catch (NullPointerException e){
+                    //System.out.println("Null command received.");
+                    System.out.println("Client is sending null command. That's not normal");
+                    this.quit();
                 }
             } catch (IOException e) {
                 System.out.println("Connection with the client is lost.");

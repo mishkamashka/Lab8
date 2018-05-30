@@ -95,7 +95,7 @@ public class ClientApp {
         locker.lock();
         AuthPanel authPanel = new AuthPanel(this);
         try {
-            clientSocket = new InetSocketAddress(InetAddress.getByName("localhost"), 4718);
+            clientSocket = new InetSocketAddress(InetAddress.getByName("localhost"), 9999);
             channel = SocketChannel.open(clientSocket);
         } catch (IOException e){
             channel = null;
